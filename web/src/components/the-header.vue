@@ -13,6 +13,3 @@
     </a-menu>
   </a-layout-header>
 </template>
-<script lang="ts">
-
-</script>
