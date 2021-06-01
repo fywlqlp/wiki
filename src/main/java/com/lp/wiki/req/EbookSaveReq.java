@@ -1,6 +1,6 @@
-package com.lp.wiki.resp;
+package com.lp.wiki.req;
 
-public class EbookResp {
+public class EbookSaveReq {
     private Long id;
 
     private String name;
