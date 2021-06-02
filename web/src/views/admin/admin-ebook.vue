@@ -67,6 +67,7 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue';
 import axios from 'axios';
+import { message } from 'ant-design-vue'
 
 
 export default defineComponent({
@@ -133,15 +134,14 @@ export default defineComponent({
       ).then((response) => {
         loading.value = false;
         const data = response.data;
-        console.log(response)
-        ebooks.value = data.content.list.map((item,index) => {
-          item.id = item.id + ''
-          return item
-        });
-        console.log(ebooks.value)
-        // 重置分页按钮
-        pagination.value.current = params.page;
-        pagination.value.total = data.content.total;
+        if (data.success) {
+          ebooks.value = data.content.list
+          // 重置分页按钮
+          pagination.value.current = params.page;
+          pagination.value.total = data.content.total;
+        } else {
+          message.error(data.message)
+        }
       });
     };
 
