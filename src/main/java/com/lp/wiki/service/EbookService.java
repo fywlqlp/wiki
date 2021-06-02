@@ -51,7 +51,6 @@ public class EbookService {
 //        }
         // 列表复制
         List<EbookQueryResp> list = CopyUtil.copyList(ebookList, EbookQueryResp.class);
-
         PageResp<EbookQueryResp> pageResp = new PageResp<>();
         pageResp.setTotal(pageInfo.getTotal());
         pageResp.setList(list);
@@ -71,5 +70,12 @@ public class EbookService {
             //更新
             ebookMapper.updateByPrimaryKey(ebook);
         }
+    }
+
+    /**
+     * 删除
+     */
+    public void delete(Long id) {
+        ebookMapper.deleteByPrimaryKey(id);
     }
 }
