@@ -3,15 +3,12 @@
     <a-layout-sider width="200" style="background: #fff">
       <a-menu
           mode="inline"
-          v-model:selectedKeys="selectedKeys2"
-          v-model:openKeys="openKeys"
           :style="{ height: '100%', borderRight: 0 }"
+          @click="handleClick"
       >
-        <a-menu-item>
-          <router-link :to="'/'">
-            <MailOutlined />
-            <span>欢迎</span>
-          </router-link>
+        <a-menu-item key="welcome">
+          <MailOutlined />
+          <span>欢迎</span>
         </a-menu-item>
         <a-sub-menu v-for="item in level1" :key="item.id">
           <template v-slot:title>
@@ -26,7 +23,10 @@
     <a-layout-content
         :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
     >
-      <a-list item-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
+      <div class="welcome" v-show="isShowWelcome">
+        <h1>欢迎使用lp知识库</h1>
+      </div>
+      <a-list v-show="!isShowWelcome" tem-layout="vertical" size="large" :grid="{ gutter: 20, column: 3 }" :data-source="ebooks">
         <template #renderItem="{ item }">
           <a-list-item key="item.name">
             <template #actions>
@@ -92,9 +92,20 @@ export default defineComponent({
         }
       })
     }
-    const handleClick = () => {
-      console.log("menu click")
+
+    const isShowWelcome = ref(true)
+
+    const handleClick = (value: any) => {
+      // if (value.key === 'welcome') {
+      //   isShowWelcome.value = true;
+      // } else {
+      //   isShowWelcome.value = false;
+      // }
+      console.log(value)
+      isShowWelcome.value = value.key === 'welcome' ? true : false;
     }
+
+
 
     onMounted(() => {
       handleQueryCategory();
@@ -126,7 +137,8 @@ export default defineComponent({
         { type: 'MessageOutlined', text: '2' },
       ],
       level1,
-      handleClick
+      handleClick,
+      isShowWelcome
     }
   }
 });
