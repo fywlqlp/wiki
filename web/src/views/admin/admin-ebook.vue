@@ -109,13 +109,8 @@ export default defineComponent({
         dataIndex: 'name'
       },
       {
-        title: '分类一',
-        key: 'category1Id',
-        dataIndex: 'category1Id'
-      },
-      {
-        title: '分类二',
-        dataIndex: 'category2Id'
+        title: '分类',
+        slots: { customRender: 'category' }
       },
       {
         title: '文档数',
@@ -232,13 +227,15 @@ export default defineComponent({
     }
 
     const level1 = ref()
+    let categorys: any
+
     const handleQueryCategory = () => {
       loading.value = true;
       axios.get("/category/all").then((response) => {
         loading.value = false;
         const data = response.data;
         if (data.success) {
-          const categorys = data.content;
+          categorys = data.content;
 
           level1.value = []
           level1.value = Tool.array2Tree(categorys, 0);
@@ -246,6 +243,16 @@ export default defineComponent({
           message.error(data.message)
         }
       })
+    }
+
+    const getCategoryName = (cid: number) => {
+      let result = ""
+      categorys.forEach((item: any) => {
+        if (item.id === cid) {
+          result = item.name
+        }
+      })
+      return result
     }
 
     onMounted(() => {
@@ -272,7 +279,8 @@ export default defineComponent({
       handleQuery,
       param,
       categoryIds,
-      level1
+      level1,
+      getCategoryName
     }
   }
 });
