@@ -7,14 +7,12 @@
               v-if="level1.length > 0"
               :tree-data="level1"
               @select="onSelect"
-              :replaceFileds="{title: 'name', key: 'id', value: 'id'}"
+              :replaceFields="{title: 'name', key: 'id', value: 'id'}"
               :defaultExpandAll="true"
           >
-
           </a-tree>
         </a-col>
         <a-col :span="18">
-
         </a-col>
       </a-row>
     </a-layout-content>
@@ -40,7 +38,7 @@ export default defineComponent({
      * 数据查询
      **/
     const handleQuery = () => {
-      axios.get("/doc/all").then((response) => {
+      axios.get("/doc/all" + route.query.ebookId).then((response) => {
         const data = response.data;
         if (data.success) {
           docs.value = data.content
