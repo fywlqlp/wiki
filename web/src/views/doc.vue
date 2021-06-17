@@ -13,7 +13,7 @@
           </a-tree>
         </a-col>
         <a-col :span="18">
-          <div :innerHTML="html"></div>
+          <div class="wangeditor" :innerHTML="html"></div>
         </a-col>
       </a-row>
     </a-layout-content>
@@ -84,3 +84,40 @@ export default defineComponent({
   }
 });
 </script>
+<style>
+  .wangeditor table {
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+  }
+  .wangeditor table td,
+  .wangeditor table th {
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 3px 5px;
+  }
+  .wangeditor table th {
+    border-bottom: 2px solid #ccc;
+    text-align: center;
+  }
+  .wangeditor blockquote {
+    display: block;
+    border-left: 8px solid #d0e5f2;
+    padding: 5px 10px;
+    margin: 10px 0;
+    line-height: 1.4;
+    font-size: 100%;
+    background-color: #f1f1f1;
+  }
+  .wangeditor code {
+    display: inline-block;
+    *display: inline;
+    *zoom: 1;
+    background-color: #f1f1f1;
+    border-radius: 3px;
+    padding: 3px 5px;
+    margin: 0 3px;
+  }
+  .wangeditor pre code {
+    display: block;
+  }
+</style>
