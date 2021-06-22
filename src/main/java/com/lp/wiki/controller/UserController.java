@@ -1,6 +1,7 @@
 package com.lp.wiki.controller;
 
 import com.lp.wiki.req.UserQueryReq;
+import com.lp.wiki.req.UserResetPasswordReq;
 import com.lp.wiki.req.UserSaveReq;
 import com.lp.wiki.resp.CommonResp;
 import com.lp.wiki.resp.UserQueryResp;
@@ -32,6 +33,14 @@ public class UserController {
         req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
         CommonResp resp = new CommonResp<>();
         userService.save(req);
+        return resp;
+    }
+
+    @PostMapping("/reset-password")
+    public CommonResp resetPassword(@Valid @RequestBody UserResetPasswordReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp resp = new CommonResp<>();
+        userService.resetPassword(req);
         return resp;
     }
 

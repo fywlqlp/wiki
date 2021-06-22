@@ -37,6 +37,9 @@
         </template>
         <template v-slot:action="{ text, record }">
           <a-space size="small">
+            <a-button type="primary" @click="resetPassword(record)">
+              重置密码
+            </a-button>
             <a-button type="primary" @click="edit(record)">
               编辑
             </a-button>
@@ -56,7 +59,7 @@
       </a-table>
     </a-layout-content>
   </a-layout>
-  <a-modal v-model:visible="modalVisible" title="电子书表单" @ok="handleModalOk" :confirm-loading="modalLoading">
+  <a-modal v-model:visible="modalVisible" title="用户表单" @ok="handleModalOk" :confirm-loading="modalLoading">
     <a-form :model="user" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
       <a-form-item label="登录名">
         <a-input v-model:value="user.loginName" :disabled="!!user.id"/>
@@ -65,6 +68,13 @@
         <a-input v-model:value="user.name" />
       </a-form-item>
       <a-form-item label="密码"  v-show="!user.id">
+        <a-input v-model:value="user.password"/>
+      </a-form-item>
+    </a-form>
+  </a-modal>
+  <a-modal v-model:visible="resetModalVisible" title="重置密码" @ok="handleResetModalOk" :confirm-loading="resetModalLoading">
+    <a-form :model="user" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+      <a-form-item label="新密码">
         <a-input v-model:value="user.password"/>
       </a-form-item>
     </a-form>
@@ -206,6 +216,40 @@ export default defineComponent({
       });
     }
 
+    /**
+    * 重置密码
+    */
+
+    const resetModalVisible = ref(false)
+    const resetModalLoading = ref(false)
+    const handleResetModalOk = () => {
+      resetModalVisible.value = true;
+      user.value.password = hexMd5(user.value.password + KEY)
+      axios.post("/user/reset-password", user.value).then((response) => {
+        const data = response.data;
+        resetModalLoading.value = false;
+        if (data.success) {
+          resetModalVisible.value = false;
+
+          //重新加载列表
+          handleQuery({
+            page: pagination.value.current,
+            size: pagination.value.pageSize
+          });
+        } else {
+          message.error(data.message)
+        }
+      });
+    }
+
+    /**
+     * 重置密码
+     */
+    const resetPassword = (record: any) => {
+      resetModalVisible.value = true;
+      user.value = Tool.copy(record)
+      user.value.password = null
+    }
 
     onMounted(() => {
       handleQuery({
@@ -224,6 +268,10 @@ export default defineComponent({
       modalVisible,
       modalLoading,
       handleModalOk,
+      resetModalVisible,
+      resetModalLoading,
+      handleResetModalOk,
+      resetPassword,
       user,
       add,
       handleDelete,

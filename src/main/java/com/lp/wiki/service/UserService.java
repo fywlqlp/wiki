@@ -8,6 +8,7 @@ import com.lp.wiki.exception.BusinessException;
 import com.lp.wiki.exception.BusinessExceptionCode;
 import com.lp.wiki.mapper.UserMapper;
 import com.lp.wiki.req.UserQueryReq;
+import com.lp.wiki.req.UserResetPasswordReq;
 import com.lp.wiki.req.UserSaveReq;
 import com.lp.wiki.resp.UserQueryResp;
 import com.lp.wiki.resp.PageResp;
@@ -100,5 +101,13 @@ public class UserService {
         } else {
             return userList.get(0);
         }
+    }
+
+    /**
+     * 重置密码
+     */
+    public void resetPassword(UserResetPasswordReq req) {
+        User user = CopyUtil.copy(req, User.class);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 }
