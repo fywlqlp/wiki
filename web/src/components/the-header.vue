@@ -23,7 +23,10 @@
       <a-menu-item key="/about">
         <router-link to="/about">关于我们</router-link>
       </a-menu-item>
-      <a class="login-menu" @click="showLoginModal">
+      <a class="login-menu" v-show="user.id">
+        <span>您好: {{user.name}}</span>
+      </a>
+      <a class="login-menu" @click="showLoginModal" v-show="!user.id">
         <span>登录</span>
       </a>
     </a-menu>
@@ -57,6 +60,10 @@
         loginName: 'test',
         password: 'test'
       })
+      //登录后保存
+      const user = ref()
+      user.value = {}
+
       const loginModalVisible = ref(false)
       const loginModalLoading = ref(false)
       const showLoginModal = () => {
@@ -74,6 +81,7 @@
           if (data.success) {
             loginModalVisible.value = false
             message.success("登录成功！")
+            user.value = data.content;
           } else {
             message.error(data.message)
           }
@@ -85,7 +93,8 @@
         loginModalVisible,
         loginModalLoading,
         showLoginModal,
-        login
+        login,
+        user
       }
     }
   })
