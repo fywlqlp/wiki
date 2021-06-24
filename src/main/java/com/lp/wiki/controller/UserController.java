@@ -1,9 +1,11 @@
 package com.lp.wiki.controller;
 
+import com.lp.wiki.req.UserLoginReq;
 import com.lp.wiki.req.UserQueryReq;
 import com.lp.wiki.req.UserResetPasswordReq;
 import com.lp.wiki.req.UserSaveReq;
 import com.lp.wiki.resp.CommonResp;
+import com.lp.wiki.resp.UserLoginResp;
 import com.lp.wiki.resp.UserQueryResp;
 import com.lp.wiki.resp.PageResp;
 import com.lp.wiki.service.UserService;
@@ -48,6 +50,15 @@ public class UserController {
     public CommonResp delete(@PathVariable Long id) {
         CommonResp resp = new CommonResp<>();
         userService.delete(id);
+        return resp;
+    }
+
+    @PostMapping("/login")
+    public CommonResp login(@Valid @RequestBody UserLoginReq req) {
+        req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+        CommonResp<UserLoginResp> resp = new CommonResp<>();
+        UserLoginResp userLoginResp = userService.login(req);
+        resp.setContent(userLoginResp);
         return resp;
     }
 }
